@@ -16,7 +16,7 @@ const legendOptions = {
 
 const DoughnutChart = ({ flexStyle, textStyle }) => {
   const products = useProductStore((state) => state.products);
-  console.log(products);
+  // console.log(products);
   const groceriesArr = products.filter((item) => item.category === "groceries");
 
   const data = {

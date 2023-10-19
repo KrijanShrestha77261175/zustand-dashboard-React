@@ -32,7 +32,7 @@ const options = {
       beginAtZero: true,
       title: {
         display: true,
-        text: "Home Depot", // Custom label for the y-axis
+        text: "Category", // Custom label for the y-axis
         font: {
           size: 12,
           family: "Montserrat",
@@ -72,17 +72,36 @@ const options = {
 
 const HorizontalBar = ({ flexStyle, textStyle }) => {
   const products = useProductStore((state) => state.products);
-  const homeDepotArr = products.filter(
-    (item) => item.category === "home-decoration"
+  const setProducts = useProductStore((state) => state.setProducts);
+
+  const reducedPrice = Object.values(
+    products.reduce((acc, curr) => {
+      acc[curr.category] = [...(acc[curr.category] || []), curr.price];
+      return acc;
+    }, {})
   );
 
-  const setProducts = useProductStore((state) => state.setProducts);
+  const reducedCategory = Object.values(
+    products.reduce((acc, curr) => {
+      acc[curr.category] = [...(acc[curr.category] || []), curr];
+      return acc;
+    }, {})
+  );
+
+  let totalPriceArr = [];
+
+  const newArr = reducedPrice.map((item) => {
+    let sum = item.reduce((acc, curr) => {
+      return (acc += curr);
+    });
+    totalPriceArr.push(sum);
+  });
+
   const data = {
-    labels: homeDepotArr.map((data) => data.title),
+    labels: reducedCategory.map((data) => data[0].category),
     datasets: [
       {
-        label: "Home Depot",
-        data: homeDepotArr.map((data) => data.price),
+        data: totalPriceArr.map((data) => data),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
@@ -111,7 +130,7 @@ const HorizontalBar = ({ flexStyle, textStyle }) => {
   }, []);
   return (
     <Box sx={flexStyle}>
-      <Text sx={textStyle}>Home-Depot VS Prices</Text>
+      <Text sx={textStyle}>Category VS Prices</Text>
       <Bar options={options} data={data} />
     </Box>
   );

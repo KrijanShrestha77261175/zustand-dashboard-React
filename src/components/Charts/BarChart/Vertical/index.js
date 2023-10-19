@@ -69,7 +69,7 @@ const labels = ["January", "February", "March", "April", "May"];
 const VerticalBar = ({ flexStyle, textStyle }) => {
   const products = useProductStore((state) => state.products);
   const testCategory = products.map((item) => item.category);
-  console.log(testCategory);
+  // console.log(testCategory);
   const fragranceArr = products.filter(
     (item) => item.category === "fragrances"
   );
